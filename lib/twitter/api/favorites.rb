@@ -56,7 +56,7 @@ module Twitter
       #   @param ids [Array<Integer>, Set<Integer>] An array of Tweet IDs.
       #   @param options [Hash] A customizable set of options.
       def unfavorite(*args)
-        threaded_object_from_response(Twitter::Tweet, :post, "/1.1/favorites/destroy.json", args)
+        parallel_object_from_response(Twitter::Tweet, :post, "/1.1/favorites/destroy.json", args)
       end
       alias favorite_destroy unfavorite
       alias favourite_destroy unfavorite
@@ -78,7 +78,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def favorite(*args)
         arguments = Twitter::API::Arguments.new(args)
-        arguments.flatten.threaded_map do |id|
+        arguments.flatten.pmap do |id|
           begin
             object_from_response(Twitter::Tweet, :post, "/1.1/favorites/create.json", arguments.options.merge(:id => id))
           rescue Twitter::Error::Forbidden => error
@@ -108,7 +108,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def favorite!(*args)
         arguments = Twitter::API::Arguments.new(args)
-        arguments.flatten.threaded_map do |id|
+        arguments.flatten.pmap do |id|
           begin
             object_from_response(Twitter::Tweet, :post, "/1.1/favorites/create.json", arguments.options.merge(:id => id))
           rescue Twitter::Error::Forbidden => error

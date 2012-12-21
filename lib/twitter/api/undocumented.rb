@@ -104,7 +104,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def statuses_activity(*args)
         arguments = Twitter::API::Arguments.new(args)
-        arguments.flatten.threaded_map do |id|
+        arguments.flatten.pmap do |id|
           status_activity(id, arguments.options)
         end
       end
