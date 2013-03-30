@@ -9,6 +9,7 @@ SimpleCov.start
 
 require 'twitter'
 require 'twitter/identity_map'
+require 'twitter/stream'
 require 'rspec'
 require 'stringio'
 require 'tempfile'
