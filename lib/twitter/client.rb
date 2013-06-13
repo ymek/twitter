@@ -91,6 +91,9 @@ module Twitter
           request.headers[:authorization] = bearer_token_credentials_auth_header
           request.headers[:content_type] = 'application/x-www-form-urlencoded; charset=UTF-8'
           request.headers[:accept] = '*/*' # It is important we set this, otherwise we get an error.
+        elsif params.delete(:oauth_token_request)
+          request.headers[:authorization] = oauth_auth_header(method, path, signature_params).to_s
+          request.headers[:accept] = 'application/json' # It is important we set this, otherwise we get an error.
         elsif params.delete(:app_auth) || !user_token?
           unless bearer_token?
             @bearer_token = token[:access_token]

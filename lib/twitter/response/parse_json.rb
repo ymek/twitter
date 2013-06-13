@@ -7,6 +7,10 @@ module Twitter
 
       def parse(body)
         case body
+        when /^oauth_\w*=/
+          CGI.parse(body).inject({}) do |h, (k, v)|
+            h.merge(k.strip.to_sym => v.first)
+          end
         when /\A^\s*$\z/, nil
           nil
         else
